@@ -39,3 +39,4 @@ jobs:
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "checkov tests passed!"}' $DISCORD_WEBHOOK
             else
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "checkov tests failed!"}' $DISCORD_WEBHOOK
+            fi

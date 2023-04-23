@@ -1,3 +1,7 @@
+environment:
+  DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
+
+
 jobs:
   build:
     machine:
@@ -10,3 +14,12 @@ jobs:
       - run: cd / && sudo mkdir logs && cd logs && sudo touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
       - run: cd src/ && python3 seleniumunit.py
+
+      - run:
+          name: Notify Discord
+            command: |
+               if [ "$CIRCLE_TEST_RESULT" == "0" ]; then
+                  curl -X POST -H 'Content-Type: application/json' -d '{"content": "All tests passed!"}' $DISCORD_WEBHOOK
+               else
+                  curl -X POST -H 'Content-Type: application/json' -d '{"content": "Tests failed!"}' $DISCORD_WEBHOOK
+               fi

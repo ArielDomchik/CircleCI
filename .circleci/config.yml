@@ -23,3 +23,4 @@ jobs:
             else
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "Tests failed!"}' $DISCORD_WEBHOOK
             fi
+          when: always

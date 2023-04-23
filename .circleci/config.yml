@@ -24,4 +24,7 @@ jobs:
       - run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
       - run: docker build -t registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM /home/circleci/project/src/
       - run: docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
+      - run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - run: unzip awscliv2.zip
+      - run: sudo ./aws/install
       - run: cd terraform-configuration/ && go mod init eks_argocd && go mod tidy && go test -v -timeout 30m 

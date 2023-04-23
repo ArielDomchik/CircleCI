@@ -5,4 +5,5 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update 
-      - run: docker compose up --build -d
+      - run: cd src/ && docker compose up --build -d
+      - run: python3 /src/checkapplication.py

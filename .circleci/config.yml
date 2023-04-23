@@ -5,4 +5,4 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update && sudo apt-get install -y docker-compose
-      - run: docker-compose build up --build -d
+      - run: docker-compose up --build -d

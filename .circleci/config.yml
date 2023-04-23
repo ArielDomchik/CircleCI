@@ -1,20 +1,19 @@
-environment:
-  DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
-
-
 jobs:
   build:
     machine:
       image: ubuntu-2004:2023.04.2
+    environment:
+      DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
     steps:
       - checkout
       - run: sudo apt-get update 
       - run: ls && docker compose up --build -d
       - run: cd / && sudo mkdir logs && cd logs && sudo touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
-      - run: curl 0.0.0.0
+      - run: curl 0.0.0.0:5000
       - run: cd src/ && python3 seleniumunit.py
 
+      
       - run:
           name: Notify Discord
           command: |

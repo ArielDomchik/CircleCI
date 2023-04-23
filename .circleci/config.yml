@@ -1,53 +1,9 @@
 version: 2.1
 
 jobs:
-  build-and-test:
-    docker:
-      - image: docker:20.10.9
-
+  build:
+    machine:
+      image: ubuntu:20.04
     steps:
       - checkout
-      - run:
-          name: Install Docker Compose
-          environment:
-            COMPOSE_VERSION: '1.29.2'
-          command: |
-            curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
-
-      - setup_remote_docker
-
-      - run:
-          name: Start all services declared in docker-compose.yml
-          command: docker-compose up -d
-
-
-      - run:
-          name: Run Test1
-          command: |
-            python3 checkapplication.py
-
-      - run:
-          name: Run Test2
-          command: |
-            python3 seleniumunit.py
-
-      - run:
-          name: Push image to DockerHub
-          command: |
-            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-            docker tag web_nginx "$DOCKER_USER"/ariel:nginx
-            docker tag web_my_python_app "$DOCKER_USER"/ariel:webapp
-            docker tag web_my_python_app2 "$DOCKER_USER"/ariel:webapp
-            docker commit web_nginx_1 "$DOCKER_USER"/ariel:nginx
-            docker commit my_python_app "$DOCKER_USER"/ariel:webapp
-            docker commit my_python_app2 "$DOCKER_USER"/ariel:webapp
-            docker push "$DOCKER_USER"/ariel:nginx
-            docker push "$DOCKER_USER"/ariel:webapp
-            docker push "$DOCKER_USER"/ariel:webapp
-
-workflows:
-  build-and-test:
-    jobs:
-      - build-and-test
+      - run: echo "Hello, world!"

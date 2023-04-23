@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-kubernetes-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: "a2cdde827e6d54a528f338a9a9147c3c-783185334.us-east-1.elb.amazonaws.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: weather-app
+            port:
+              number: 80
+  - host: "a2cdde827e6d54a528f338a9a9147c3c-783185334.us-east-1.elb.amazonaws.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/solitaire"
+        backend:
+          service:
+            name: solitaire
+            port:
+              number: 80

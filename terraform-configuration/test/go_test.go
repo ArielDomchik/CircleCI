@@ -12,7 +12,7 @@ func TestEKSTerraformModule(t *testing.T) {
 	t.Parallel()
 
 	// Generate a random name to avoid naming conflicts
-	expectedName := fmt.Sprintf("test-%s", random.UniqueId())
+	expectedName := fmt.Sprintf("education-eks-%s", random.UniqueId())
 
 	// Specify the path to the Terraform code
 	terraformOptions := &terraform.Options{

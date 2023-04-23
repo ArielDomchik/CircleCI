@@ -6,4 +6,4 @@ jobs:
       - checkout
       - run: sudo apt-get update 
       - run: ls && docker compose up --build -d
-      - run: python3 /src/checkapplication.py
+      - run: cd src/ && python3 checkapplication.py

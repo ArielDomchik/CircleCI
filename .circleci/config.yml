@@ -23,4 +23,5 @@ jobs:
           when: always
       - run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
       - run: docker build -t registry.gitlab.com/ariyonzor/circleci /home/circleci/project/src/
-      - run: docker push registry.gitlab.com/ariyonzor/circleci
+      - run: docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
+      - run: cd src/ && go test -v -timeout 30m

@@ -1,0 +1,18 @@
+version: '3'
+services:
+    my_python_app:
+        container_name: my_python_app
+        build: ./webproject
+    my_python_app2:
+        container_name: my_python_app2
+        build: ./webproject
+    nginx:
+        build: ./nginx
+        #image: nginx
+        #volumes:
+        #  - ./nginx:/etc/nginx/conf.d
+        ports:
+          - "80:80"
+        depends_on:
+          - my_python_app
+          - my_python_app2

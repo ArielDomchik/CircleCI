@@ -1,63 +1,59 @@
 version: 2.1
 
 orbs:
-  docker: circleci/docker@1.2.3
+  discord: circleci/discord@1.0.3
 
 jobs:
   build:
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.9.1-buster
     steps:
       - checkout
       - run:
-          name: Install Docker Compose
+          name: Build and Test Docker Image
           command: |
-            sudo curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
+            sudo docker-compose up --build -d
       - run:
-          name: Build Docker images
-          command: |
-            docker-compose up --build -d
-      - run:
-          name: Run Unit tests
+          name: Run Check Application Test
           command: |
             python3 checkapplication.py
-      - run:
-          name: Run Selenium tests
-          command: |
-            python3 seleniumunit.py
-    # notify on Slack or Discord about test results
-    - notify:
-        name: Test Results
-        channels:
-          - '#general'
-        message: |
-          Tests Passed
+    parallelism: 1
 
-  deploy:
+  selenium_test:
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python:3.9.1-buster
+      - image: circleci/selenium:3.141.59-browsers
     steps:
       - checkout
-      - setup_remote_docker
       - run:
-          name: Push Docker images to registry
+          name: Install Dependencies
           command: |
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker tag web_nginx arieldomchik/ariel:nginx
-            docker tag web_my_python_app arieldomchik/ariel:webapp
-            docker tag web_my_python_app2 arieldomchik/ariel:webapp
-            docker commit web_nginx_1 arieldomchik/ariel:nginx
-            docker commit my_python_app arieldomchik/ariel:webapp
-            docker commit my_python_app2 arieldomchik/ariel:webapp
-            docker push arieldomchik/ariel:nginx
-            docker push arieldomchik/ariel:webapp
-            docker push arieldomchik/ariel:webapp
+            sudo apt-get update
+            sudo apt-get install -y chromium
+            pip3 install selenium
+      - run:
+          name: Run Selenium Test
+          command: |
+            python3 seleniumunit.py
+    parallelism: 1
 
 workflows:
-  build-and-deploy:
+  build_and_test:
     jobs:
       - build
-      - deploy:
+      - selenium_test:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - main
+
+  push_image:
+    jobs:
+      - build:
+          requires:
+            - selenium_test
+      - discord/notify:
           requires:
             - build

@@ -6,7 +6,7 @@ jobs:
       DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
     steps:
       - checkout
-      - run: sudo snap install go --classic && sudo apt-get update 
+      - run: sudo snap install go --classic && sudo apt-get update
       - run: ls && docker compose up --build -d
       - run: cd src/ && touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
@@ -16,12 +16,25 @@ jobs:
           name: Notify Discord
           command: |
             if [ "$CIRCLE_TEST_RESULT" == "0" ]; then
-              curl -X POST -H 'Content-Type: application/json' -d '{"content": "All tests passed!"}' $DISCORD_WEBHOOK
+              curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium tests passed!"}' $DISCORD_WEBHOOK
             else
-              curl -X POST -H 'Content-Type: application/json' -d '{"content": "Tests failed!"}' $DISCORD_WEBHOOK
+              curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium Tests failed!"}' $DISCORD_WEBHOOK
             fi
           when: always
       - run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
       - run: docker build -t registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM /home/circleci/project/src/
-      - run: docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
-      - run: cd terraform-configuration/ && go mod init eks_argocd && go mod tidy && go test -v -timeout 30m 
+      - run: docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM 
+      - run: echo "[default]" > ~/.aws/credentials
+      - run: echo "aws_access_key_id = ${AWS_ACCESS_KEY}" >> ~/.aws/credentials
+      - run: echo "aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
+      - run: echo "[default]" > ~/.aws/config
+      - run: echo "region = us-east-1" >> ~/.aws/config
+      - run: cd src/ && checkov -d .
+      - run: echo "CIRCLE_TEST_RESULT=$?" >> $BASH_ENV
+      - run: 
+          name: Notify Discord
+          command: |
+            if [ "$CIRCLE_TEST_RESULT" == "0" ]; then
+              curl -X POST -H 'Content-Type: application/json' -d '{"content": "checkov tests passed!"}' $DISCORD_WEBHOOK
+            else
+              curl -X POST -H 'Content-Type: application/json' -d '{"content": "checkov tests failed!"}' $DISCORD_WEBHOOK

@@ -30,7 +30,7 @@ jobs:
       - run: echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
       - run: echo "[default]" > ~/.aws/config
       - run: echo "region = us-east-1" >> ~/.aws/config
-      - run: cd src/ && checkov -d .
+      - run: cd terraform-configuration/ && checkov -d .
       - run: echo "CIRCLE_TEST_RESULT=$?" >> $BASH_ENV
       - run: 
           name: Notify Discord

@@ -4,5 +4,5 @@ jobs:
       image: ubuntu-2004:2023.04.2
     steps:
       - checkout
-      - run: sudo apt-get update && sudo apt-get install -y docker-compose
-      - run: docker-compose up --build -d
+      - run: sudo apt-get update 
+      - run: docker compose up --build -d

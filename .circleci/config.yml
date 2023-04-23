@@ -10,7 +10,8 @@ jobs:
       - run: ls && docker compose up --build -d
       - run: cd src/ && touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
-      - run: cd src/ && python3 seleniumunit.py      
+      - run: cd src/ && python3 seleniumunit.py
+      - run: echo "CIRCLE_TEST_RESULT=$?" >> $BASH_ENV
       - run:
           name: Notify Discord
           command: |

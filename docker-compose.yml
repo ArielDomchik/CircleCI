@@ -7,7 +7,7 @@ services:
         container_name: my_python_app2
         build: .
     nginx:
-        build: .
+        build: ./nginx
         #image: nginx
         #volumes:
         #  - ./nginx:/etc/nginx/conf.d

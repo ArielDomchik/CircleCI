@@ -10,8 +10,7 @@ jobs:
       - run:
           name: Build the application with docker-compose
           command: |
-            apt-get update
-            apt-get install -y docker-compose
+            pip install docker-compose
             docker-compose up --build -d
 
       - run:

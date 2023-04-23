@@ -22,5 +22,5 @@ jobs:
             fi
           when: always
       - run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
-      - run: pwd && docker build -t docker build -t registry.gitlab.com/ariyonzor/circleci /src/
+      - run: docker build -t docker build -t registry.gitlab.com/ariyonzor/circleci /home/circleci/project/src/
       - run: docker push registry.gitlab.com/ariyonzor/circleci

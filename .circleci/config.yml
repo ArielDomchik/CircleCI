@@ -1,59 +1,42 @@
 version: 2.1
 
-orbs:
-  discord: circleci/discord@1.0.3
-
 jobs:
-  build:
+  build-and-test:
     docker:
-      - image: circleci/python:3.9.1-buster
+      - image: docker:20.10.7
+
     steps:
       - checkout
       - run:
-          name: Build and Test Docker Image
+          name: Build the application with docker-compose
           command: |
-            sudo docker-compose up --build -d
+            docker-compose up --build -d
+
       - run:
-          name: Run Check Application Test
+          name: Run Test1
           command: |
             python3 checkapplication.py
-    parallelism: 1
 
-  selenium_test:
-    docker:
-      - image: circleci/python:3.9.1-buster
-      - image: circleci/selenium:3.141.59-browsers
-    steps:
-      - checkout
       - run:
-          name: Install Dependencies
-          command: |
-            sudo apt-get update
-            sudo apt-get install -y chromium
-            pip3 install selenium
-      - run:
-          name: Run Selenium Test
+          name: Run Test2
           command: |
             python3 seleniumunit.py
-    parallelism: 1
+
+      - run:
+          name: Push image to DockerHub
+          command: |
+            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+            docker tag web_nginx "$DOCKER_USER"/ariel:nginx
+            docker tag web_my_python_app "$DOCKER_USER"/ariel:webapp
+            docker tag web_my_python_app2 "$DOCKER_USER"/ariel:webapp
+            docker commit web_nginx_1 "$DOCKER_USER"/ariel:nginx
+            docker commit my_python_app "$DOCKER_USER"/ariel:webapp
+            docker commit my_python_app2 "$DOCKER_USER"/ariel:webapp
+            docker push "$DOCKER_USER"/ariel:nginx
+            docker push "$DOCKER_USER"/ariel:webapp
+            docker push "$DOCKER_USER"/ariel:webapp
 
 workflows:
-  build_and_test:
+  build-and-test:
     jobs:
-      - build
-      - selenium_test:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - main
-
-  push_image:
-    jobs:
-      - build:
-          requires:
-            - selenium_test
-      - discord/notify:
-          requires:
-            - build
+      - build-and-test

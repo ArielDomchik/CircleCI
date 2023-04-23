@@ -8,10 +8,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build the application with docker-compose
+          name: Install Docker Compose
+          environment:
+            COMPOSE_VERSION: '1.29.2'
           command: |
-            pip install docker-compose
-            docker-compose up --build -d
+            curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+
+      - setup_remote_docker
+
+      - run:
+          name: Start all services declared in docker-compose.yml
+          command: docker-compose up -d
+
 
       - run:
           name: Run Test1

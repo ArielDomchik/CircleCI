@@ -2,10 +2,10 @@ version: '3'
 services:
     my_python_app:
         container_name: my_python_app
-        build: .
+        build: ./src
     my_python_app2:
         container_name: my_python_app2
-        build: .
+        build: ./src
     nginx:
         build: ./nginx
         #image: nginx

@@ -1,9 +1,8 @@
-version: 2.1
-
 jobs:
   build:
     machine:
-      image: ubuntu:20.04
+      image: ubuntu-2004:2023.04.2
     steps:
       - checkout
-      - run: echo "Hello, world!"
+      - run: sudo apt-get update && sudo apt-get install -y docker-compose
+      - run: docker-compose build up --build -d

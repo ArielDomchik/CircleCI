@@ -2,12 +2,12 @@ version: '3'
 services:
     my_python_app:
         container_name: my_python_app
-        build: ./webproject
+        build: .
     my_python_app2:
         container_name: my_python_app2
-        build: ./webproject
+        build: .
     nginx:
-        build: ./nginx
+        build: .
         #image: nginx
         #volumes:
         #  - ./nginx:/etc/nginx/conf.d

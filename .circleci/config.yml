@@ -21,6 +21,6 @@ jobs:
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "Tests failed!"}' $DISCORD_WEBHOOK
             fi
           when: always
-      - run: docker login -u $GITLAB_USER registry.gitlab.com -p $ACCESS_TOKEN
+      - run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
       - run: cd src/ && docker build -t docker build -t registry.gitlab.com/ariyonzor/circleci .
       - run: docker push registry.gitlab.com/ariyonzor/circleci

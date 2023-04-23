@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: docker:20.10.7
+      - image: docker:20.10.9
 
     steps:
       - checkout

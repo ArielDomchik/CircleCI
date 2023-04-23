@@ -8,4 +8,4 @@ jobs:
       - run: ls && docker compose up --build -d
       - run: cd src/ && touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
-      - run: cd src/ && python3 checkapplication.py
+      - run: cd src/ && python3 seleniumunit.py

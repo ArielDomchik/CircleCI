@@ -6,7 +6,7 @@ jobs:
       DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
     steps:
       - checkout
-      - run: sudo apt-get install -y golang-go && sudo apt-get install awscli && sudo apt-get update 
+      - run: sudo snap install go --classic && sudo apt-get update 
       - run: ls && docker compose up --build -d
       - run: cd src/ && touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
@@ -24,7 +24,4 @@ jobs:
       - run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
       - run: docker build -t registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM /home/circleci/project/src/
       - run: docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
-      - run: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      - run: unzip awscliv2.zip
-      - run: sudo ./aws/install
       - run: cd terraform-configuration/ && go mod init eks_argocd && go mod tidy && go test -v -timeout 30m 

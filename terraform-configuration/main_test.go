@@ -12,7 +12,7 @@ func TestEksClusterCreation(t *testing.T) {
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../terraform-eks",
 		Vars: map[string]interface{}{
-			"region": "us-west-2",
+			"region": "us-east-1",
 		},
 	}
 	defer terraform.Destroy(t, terraformOptions)

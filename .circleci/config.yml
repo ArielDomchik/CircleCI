@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run: sudo apt-get update 
       - run: ls && docker compose up --build -d
-      - run: cd / && sudo mkdir logs && cd logs && sudo touch app.log
+      - run: cd /src && touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
       - run: cd src/ && python3 checkapplication.py
 

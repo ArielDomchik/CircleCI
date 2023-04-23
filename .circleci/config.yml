@@ -6,7 +6,7 @@ jobs:
       DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
     steps:
       - checkout
-      - run: sudo apt-get install golang-go --classic && sudo apt-get update 
+      - run: sudo apt-get install -y golang-go && sudo apt-get update 
       - run: ls && docker compose up --build -d
       - run: cd src/ && touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt

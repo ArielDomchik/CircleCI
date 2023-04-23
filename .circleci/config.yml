@@ -24,4 +24,4 @@ jobs:
       - run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
       - run: docker build -t registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM /home/circleci/project/src/
       - run: docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
-      - run: cd terraform-configuration/ && go run main_test.go 
+      - run: cd terraform-configuration/ && go test main_test.go 

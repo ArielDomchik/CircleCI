@@ -10,8 +10,7 @@ jobs:
       - run: ls && docker compose up --build -d
       - run: cd / && sudo mkdir logs && cd logs && sudo touch app.log
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
-      - run: curl 0.0.0.0:5000
-      - run: cd src/ && python3 seleniumunit.py
+      - run: cd src/ && python3 checkapplication.py
 
       
       - run:

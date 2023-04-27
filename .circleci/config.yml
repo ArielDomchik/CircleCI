@@ -29,6 +29,7 @@ jobs:
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium tests passed!"}' $DISCORD_WEBHOOK
             else
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium Tests failed!"}' $DISCORD_WEBHOOK
+            fi
       - run:
           name: Log in to Docker registry
           command: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
@@ -55,3 +56,4 @@ jobs:
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "Checkov tests passed!"}' $DISCORD_WEBHOOK
             else
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "Checkov tests failed!"}' $DISCORD_WEBHOOK
+            fi

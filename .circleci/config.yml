@@ -6,22 +6,22 @@ jobs:
       DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
     steps:
       - checkout
-      - step:
+      - run:
           name: Update apt packages
-          run: sudo apt-get update
-      - step:
+          command: sudo apt-get update
+      - run:
           name: Build and start Docker containers
-          run: docker compose up --build -d
-      - step:
+          command: docker compose up --build -d
+      - run:
           name: Create log file
-          run: cd src/ && touch app.log
-      - step:
+          command: cd src/ && touch app.log
+      - run:
           name: Install Python dependencies
-          run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
-      - step:
+          command: cd src/ && pip3 install --no-cache-dir -r requirements.txt
+      - run:
           name: Run Selenium tests
-          run: cd src/ && python3 seleniumunit.py
-      - step:
+          command: cd src/ && python3 seleniumunit.py
+      - run:
           name: Notify Discord of test results
           when: always
           command: |
@@ -29,13 +29,13 @@ jobs:
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium tests passed!"}' $DISCORD_WEBHOOK
             else
               curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium Tests failed!"}' $DISCORD_WEBHOOK
-      - step:
+      - run:
           name: Log in to Docker registry
-          run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
-      - step:
+          command: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
+      - run:
           name: Build and push Docker image
-          run: docker build -t registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM /home/circleci/project/src/ && docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
-      - step:
+          command: docker build -t registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM /home/circleci/project/src/ && docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
+      - run:
           name: Create AWS credentials and config files
           command: |
             cd ~ && mkdir .aws && cd .aws && touch credentials && touch config
@@ -44,10 +44,10 @@ jobs:
             echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
             echo "[default]" > ~/.aws/config
             echo "region = us-east-1" >> ~/.aws/config
-      - step:
+      - run:
           name: Run Checkov tests
-          run: cd terraform-configuration/ && checkov -d .
-      - step:
+          command: cd terraform-configuration/ && checkov -d .
+      - run:
           name: Notify Discord of Checkov test results
           when: always
           command: |

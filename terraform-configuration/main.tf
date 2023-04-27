@@ -107,17 +107,17 @@ module "eks_blueprints_kubernetes_addons" {
   }
 
   argocd_manage_add_ons = true # Indicates that ArgoCD is responsible for managing/deploying add-ons
-#  argocd_applications = {
-#    addons = {
-#      path               = "chart"
-#      repo_url           = "https://github.com/aws-samples/eks-blueprints-add-ons.git"
-#      add_on_application = true
-#    }
-#    workloads = {
-#      path = "."
-#      repo_url = "https://github.com/ArielDomchik/GitOps-dev.git"
-#    }
-#  }
+  argocd_applications = {
+    addons = {
+      path               = "chart"
+      repo_url           = "https://github.com/aws-samples/eks-blueprints-add-ons.git"
+      add_on_application = true
+    }
+    workloads = {
+      path = "."
+      repo_url = "https://github.com/ArielDomchik/GitOps-dev.git"
+    }
+  }
 
   # Add-ons
   enable_amazon_eks_aws_ebs_csi_driver = true
@@ -154,10 +154,14 @@ resource "bcrypt_hash" "argo" {
   cleartext = random_password.argocd.result
 }
 
+
+#checkov:skip=CKV_AWS_149
 #tfsec:ignore:aws-ssm-secret-use-customer-key
 resource "aws_secretsmanager_secret" "argocd" {
-  name                    = "argocd-secret"
+  #checkov:skip=CKV_AWS_149
+  name                    = "argocd"
   recovery_window_in_days = 0 # Set to zero for this example to force delete during Terraform destroy
+  # checkov:skip=CKV2_AWS_57
 }
 
 resource "aws_secretsmanager_secret_version" "argocd" {

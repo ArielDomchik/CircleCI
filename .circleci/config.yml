@@ -21,6 +21,9 @@ jobs:
       - run:
           name: Run Selenium tests
           command: cd src/ && python3 seleniumunit.py
+      - run: 
+          name: Mark the exit code from the test stage to pass to the next stage the ENV Variable
+          command: echo "CIRCLE_TEST_RESULT=$?" >> $BASH_ENV
       - run:
           name: Notify Discord of test results
           when: always
@@ -48,6 +51,9 @@ jobs:
       - run:
           name: Run Checkov tests
           command: cd terraform-configuration/ && checkov -d .
+      - run:
+          name: Mark the exit code from the test stage to pass to the next stage the ENV Variable
+          command: echo "CIRCLE_TEST_RESULT=$?" >> $BASH_ENV
       - run:
           name: Notify Discord of Checkov test results
           when: always

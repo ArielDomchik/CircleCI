@@ -40,3 +40,6 @@ Outside of Deployment Pipeline
 Conclusion
 
 This project demonstrates how to deploy a Flask web application on an EKS cluster using CircleCI, Terraform and ArgoCD. By using these tools, the deployment process can be automated, which makes it easier and faster to deploy applications.
+
+
+ - ** dummy object is for kubernetes cluster, keda addon is returning an empty response for metrics server, this will prevent it

@@ -6,7 +6,7 @@ jobs:
       DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
     steps:
       - name: Checkout code
-        checkout
+      - checkout
       - name: Update apt packages
         run: sudo apt-get update
       - name: Build and start Docker containers

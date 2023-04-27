@@ -7,15 +7,15 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update
-        name: Update apt packages
+          name: Update apt packages
       - run: docker compose up --build -d
-        name: Build and start Docker containers
+          name: Build and start Docker containers
       - run: cd src/ && touch app.log
-        name: Create log file
+          name: Create log file
       - run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
-        name: Install Python dependencies
+          name: Install Python dependencies
       - run: cd src/ && python3 seleniumunit.py
-        name: Run Selenium tests
+          name: Run Selenium tests
       - run:
           command: |
             if [ "$CIRCLE_TEST_RESULT" == "0" ]; then

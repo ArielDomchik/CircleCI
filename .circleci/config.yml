@@ -6,44 +6,55 @@ jobs:
       DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
     steps:
       - checkout
-      - name: Update apt packages
-        run: sudo apt-get update
-      - name: Build and start Docker containers
-        run: ls && docker compose up --build -d
-      - name: Create log file
-        run: cd src/ && touch app.log
-      - name: Install Python dependencies
-        run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
-      - name: Run Selenium tests
-        run: cd src/ && python3 seleniumunit.py
-      - name: Notify Discord of test results
-        run:
-          command: |
-            if [ "$CIRCLE_TEST_RESULT" == "0" ]; then
-              curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium tests passed!"}' $DISCORD_WEBHOOK
-            else
-              curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium Tests failed!"}' $DISCORD_WEBHOOK
-            fi
-          when: always
-      - name: Log in to Docker registry
-        run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
-      - name: Build and push Docker image
-        run: docker build -t registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM /home/circleci/project/src/ && docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
-      - name: Create AWS credentials and config files
-        run: |
-          cd ~ && mkdir .aws && cd .aws && touch credentials && touch config
-          echo "[default]" > ~/.aws/credentials
-          echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-          echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-          echo "[default]" > ~/.aws/config
-          echo "region = us-east-1" >> ~/.aws/config
-      - name: Run Checkov tests
-        run: cd terraform-configuration/ && checkov -d .
-      - name: Notify Discord of Checkov test results
-        run:
-          command: |
-            if [ "$CIRCLE_TEST_RESULT" == "0" ]; then
-              curl -X POST -H 'Content-Type: application/json' -d '{"content": "Checkov tests passed!"}' $DISCORD_WEBHOOK
-            else
-              curl -X POST -H 'Content-Type: application/json' -d '{"content": "Checkov tests failed!"}' $DISCORD_WEBHOOK
-            fi
+      - step:
+          name: Update apt packages
+          run: sudo apt-get update
+      - step:
+          name: Build and start Docker containers
+          run: ls && docker compose up --build -d
+      - step:
+          name: Create log file
+          run: cd src/ && touch app.log
+      - step:
+          name: Install Python dependencies
+          run: cd src/ && pip3 install --no-cache-dir -r requirements.txt
+      - step:
+          name: Run Selenium tests
+          run: cd src/ && python3 seleniumunit.py
+      - step:
+          name: Notify Discord of test results
+          run:
+            command: |
+              if [ "$CIRCLE_TEST_RESULT" == "0" ]; then
+                curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium tests passed!"}' $DISCORD_WEBHOOK
+              else
+                curl -X POST -H 'Content-Type: application/json' -d '{"content": "Selenium Tests failed!"}' $DISCORD_WEBHOOK
+              fi
+            when: always
+      - step:
+          name: Log in to Docker registry
+          run: docker login -u $GITLAB_USER -p $ACCESS_TOKEN registry.gitlab.com
+      - step:
+          name: Build and push Docker image
+          run: docker build -t registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM /home/circleci/project/src/ && docker push registry.gitlab.com/ariyonzor/circleci:$CIRCLE_BUILD_NUM
+      - step:
+          name: Create AWS credentials and config files
+          run: |
+            cd ~ && mkdir .aws && cd .aws && touch credentials && touch config
+            echo "[default]" > ~/.aws/credentials
+            echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+            echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+            echo "[default]" > ~/.aws/config
+            echo "region = us-east-1" >> ~/.aws/config
+      - step:
+          name: Run Checkov tests
+          run: cd terraform-configuration/ && checkov -d .
+      - step:
+          name: Notify Discord of Checkov test results
+          run:
+            command: |
+              if [ "$CIRCLE_TEST_RESULT" == "0" ]; then
+                curl -X POST -H 'Content-Type: application/json' -d '{"content": "Checkov tests passed!"}' $DISCORD_WEBHOOK
+              else
+                curl -X POST -H 'Content-Type: application/json' -d '{"content": "Checkov tests failed!"}' $DISCORD_WEBHOOK
+              fi

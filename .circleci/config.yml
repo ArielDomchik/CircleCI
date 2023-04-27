@@ -5,7 +5,7 @@ jobs:
     environment:
       DISCORD_WEBHOOK: "https://discord.com/api/webhooks/1099606775000473660/4wymFPfjJzuMUf6MCK1c556LXGq_Ce8QnVYU90ydNUHGe0ZRWMQ0JBm8AkoAbNTqwBIt"
     steps:
-      - run: checkout
+      - checkout
       - run: sudo apt-get update
         name: Update apt packages
       - run: docker compose up --build -d

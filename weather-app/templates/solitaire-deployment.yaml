@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.solitaire }}
+  labels:
+    app: {{ .Values.solitaire }}
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.solitaire }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.solitaire }}
+    spec:
+      containers:
+      - name: {{ .Values.solitaire }}
+        image: {{ .Values.solitaireImage }}
+        imagePullPolicy: Always
+        workingDir: /usr/share/nginx/html
+        ports:
+        - name: http
+          containerPort: 80

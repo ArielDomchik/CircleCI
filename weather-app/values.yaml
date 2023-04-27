@@ -10,11 +10,16 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: "webapp-new1"
 
+image2:
+  repository: chimenesjr/solitaire
+  pullPolicy: ifNotPresent
+  tag: "nginx"
+
 env:
   name: BG_COLOR
   valueFrom:
     configMapKeyRef:
-      name: weather-app-configmap-green
+      name: workloads-configmap-green
       key: BG_COLOR
 
 volumes:
@@ -102,21 +107,11 @@ tolerations: []
 affinity: {}
 
 awsElasticBlockStore:
-  volumeID: aws://us-east-1/<vol changes>
+  volumeID: aws://us-east-1/vol-043f40a2da6c52df8
   fsType: ext4
 
-ingressClassName: nginx
-rules: 
-  host: <changes every cluster>
-  http:
-    paths:
-      pathType: Prefix
-      path: "/"
-      backend:
-        service: 
-          name: weather-app
-          port:
-            number: 32300
-
+ingressDomain: "a82fa42cee85a44bf93890b300ffdd22-1094996862.us-east-1.elb.amazonaws.com"
 
 storageClassName: weather-app-storage
+solitaire: solitaire
+solitaireImage: chimenesjr/solitaire:nginx

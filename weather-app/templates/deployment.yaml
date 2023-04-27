@@ -4,6 +4,7 @@ metadata:
   name: {{ include "weather-app.fullname" . }}
   labels:
     {{- include "weather-app.labels" . | nindent 4 }}
+  namespace: default
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

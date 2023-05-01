@@ -8,7 +8,7 @@ Flask Application Deployment on EKS Cluster with CircleCI, Terraform and ArgoCD
 This project is an example of deploying a Flask web application on an EKS cluster using CircleCI, Terraform and ArgoCD.
 
 
-Prerequisites
+**Prerequisites**
 
   -  AWS account with permissions to create an EKS cluster
   -  Terraform installed on your local machine

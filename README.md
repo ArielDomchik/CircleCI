@@ -16,7 +16,10 @@ Prerequisites
 Application Architecture
 
 The application is a multi-container application that consists of a Flask web application, Gunicorn server and an Nginx service to reverse proxy to Gunicorn to retrieve the Flask web app. The application is tested using Selenium E2E tests.
+
+
 Deployment Pipeline
+
 
 The deployment pipeline is implemented using CircleCI and consists of the following stages:
 

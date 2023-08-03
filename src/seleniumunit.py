@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
-
+import chromedriver_autoinstaller as chromedriver
 
 class TestSearch(unittest.TestCase):
 
@@ -15,6 +15,7 @@ class TestSearch(unittest.TestCase):
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        chromedriver.install()
         self.driver = webdriver.Chrome()
 #        s = Service('/home/ubuntu/chromedriver.exe')
 #        self.driver = webdriver.Chrome(service=s, options=options)
@@ -23,7 +24,7 @@ class TestSearch(unittest.TestCase):
 
     def test_search_valid(self):
         driver = self.driver
-        time.sleep(10)
+        time.sleep(5)
         driver.get('http://0.0.0.0')
         search = driver.find_element(by=By.NAME, value="city")
         search.send_keys("Haifa")

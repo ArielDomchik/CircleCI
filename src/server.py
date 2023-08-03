@@ -138,7 +138,7 @@ def weather():
     city_search_count.labels(city).inc()
     if str.isnumeric(city):
         return redirect(url_for('err'))
-    url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(city) + '?format=json'
+    url = 'https://nominatim.openstreetmap.org/search?q=' + urllib.parse.quote(city) + '&format=json'
     response = requests.get(url).json()
     if response:
         save_path = './data'
@@ -175,7 +175,7 @@ def data():
 	if request.method == 'POST':
 		city = request.form.get("city")
 		country=request.form.get("country")
-		url = 'https://nominatim.openstreetmap.org/search/' + urllib.parse.quote(city) + '?format=json'
+		url = 'https://nominatim.openstreetmap.org/search?q=' + urllib.parse.quote(city) + '&format=json'
 		response = requests.get(url).json()
 		lat, lon = response[0]['lat'], response[0]['lon']
 		country = getcountry(city)
